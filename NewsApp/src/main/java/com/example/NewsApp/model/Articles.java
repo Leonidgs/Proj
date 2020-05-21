@@ -1,5 +1,7 @@
 package com.example.NewsApp.model;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,6 @@ import lombok.Setter;
 @Setter
 public class Articles {
 
-	private Article[] headlines;
+	private List<Article> headlines;
 
 }
