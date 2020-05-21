@@ -1,15 +1,20 @@
 package com.example.NewsApp.model;
 
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Article {
-
-	String title;
-	String secondTitle;
-	Integer createDateUnixtime;
-	String url;//ссылка на статью
-	String imageUrl;//картинка
-	String description;
-	String tag; //раздел
 	
-
+	private Info info;
+	private Links links;
+	private Rubric rubric;
+	private TagNumber[] tags;
+	private Image title_image;
+	private String type;
+	
 }
+
+
+
