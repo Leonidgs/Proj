@@ -2,13 +2,12 @@ package com.example.NewsApp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.example.NewsApp.model.Articles;
+
 import com.example.NewsApp.service.IRequestHandler;
 
-
-@RestController
+@Controller
 public class WebController {
 	
 	@Value("${lenta.url}")
@@ -17,10 +16,10 @@ public class WebController {
 	@Autowired
 	private IRequestHandler handler;
 	
-	@GetMapping("/index")
-	public Articles index() {
-		Articles article = handler.requestForObject(url, Articles.class);
-		return article;
+	
+	@GetMapping("/news")
+	public String getMainPage() {
+		return "main";
 	}
 
 }
