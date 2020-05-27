@@ -18,7 +18,6 @@ public class WebController {
 	@Autowired
 	private IRequestHandler handler;
 	
-	
 	@GetMapping("/news")
 	public String getMainPage(Model model) {
 		Articles articles = handler.requestForObject(url, Articles.class);
