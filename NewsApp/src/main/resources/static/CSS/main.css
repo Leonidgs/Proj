@@ -13,3 +13,19 @@ main{
 footer{
 	background-color: #f8f9fa
 }
+
+.reg-panel {
+/* 	position: flex; */
+/* 	justify-content: center; */
+	margin-top:15px;
+}
+
+.fa-angrycreative {
+	padding-left: 20px;
+	font-size:60px;
+}
+
+.reg-panel span{
+	
+	margin-left: 10px;
+}

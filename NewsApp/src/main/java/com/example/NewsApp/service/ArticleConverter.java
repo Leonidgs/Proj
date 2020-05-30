@@ -21,9 +21,10 @@ public class ArticleConverter {
 		var content = "";
 		for (BodyElement be : singleArticle.getTopic().getBody()) {
 			if (be.getContent() instanceof String) {
-				content += be.getContent() + "<br/>";
+				content += "<p>" + be.getContent() + "<p/>";
 			}
 		}
+		content = content.replaceAll("<a \\S+/tags/\\S+ target=\"_blank\">", "");
 		dto.setContent(content);
 		dto.setDate(new Date(info.getModified() * 1000));
 		dto.setImage(headline.getTitleImage().getUrl());

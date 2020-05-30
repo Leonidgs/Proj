@@ -1,5 +1,8 @@
 package com.example.NewsApp.model.page;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,23 +19,28 @@ public class Page {
 	private int pageStep;
 	private int pagesCount;
 	private int itemsCount;
+	private List<Integer> items;
 	
 	public Page(Integer currentPage, Integer pageStep, Integer itemsCount) {
 		this.hasNextPage = true;
 		this.hasPreviousPage = false;
-		this.currentPage = 1;
+		if (currentPage != null) {
+			this.currentPage = currentPage;
+		} else {
+			this.currentPage = 1;
+		}
+		
 		this.endAt = 5;
 		this.pageStep = pageStep;
 		this.itemsCount = itemsCount;
-		this.pagesCount = itemsCount / pageStep;
+		this.pagesCount = itemsCount / 10;
 		initPage();
 	}
 	
 	public void initPage() {
 		if (currentPage / pageStep < 1) {
 			this.startAt = 1;
-			hasPreviousPage = false;
-
+			
 		} else {
 			this.startAt = currentPage / pageStep * pageStep;
 			hasPreviousPage = true;
@@ -41,12 +49,25 @@ public class Page {
 				this.startAt = pagesCount / pageStep * pageStep;
 			}
 		}
-
-		this.endAt = startAt + pageStep;
+		
+		if (currentPage > 1) {
+			hasPreviousPage = true;
+		}
+		
+		if (startAt == 1) {
+			endAt = startAt + pageStep - 1;
+		} else {
+			endAt = startAt + pageStep;
+		}
 
 		if (endAt > pagesCount) {
 			endAt = pagesCount;
 			hasNextPage = false;
+		}
+		
+		items = new ArrayList<>();
+		for (int i = startAt; i <= endAt; i++) {
+			items.add(i);
 		}
 	}
 }

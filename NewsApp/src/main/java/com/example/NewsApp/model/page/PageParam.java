@@ -18,26 +18,33 @@ public class PageParam {
 	
 	public PageParam(Articles articles, Integer pageNum) {
 		this.countArticles = articles.getHeadlines().size();
-		this.lastItem = 9;
+		this.firstItem = 0;
+		this.lastItem = 10;
 		this.step = 10;
 		init(pageNum);
 	}
 	
-	public void init(Integer pageNum) {
+    public void init(Integer pageNum) {
 		if (pageNum != null && pageNum > 0) {
-			firstItem = (pageNum * step) - step;
-			lastItem = (pageNum * step) - 1;
+			firstItem = (pageNum * step) - step + 1;
+			lastItem = (pageNum * step) + 1;
 			if (firstItem > countArticles) {
 				if (step > countArticles) {
 					firstItem = 0;
 				} else {
-					firstItem = countArticles - 11;
+					firstItem = countArticles - 10;
 				}
 			}
-			
+
 			if (lastItem > countArticles) {
-				lastItem = countArticles - 1;
+				lastItem = countArticles;
 			}
+			
 		}
+/*		
+		System.out.println("firstItem " + firstItem);
+		System.out.println("lastItem " + lastItem);
+*/
 	}
+
 }
