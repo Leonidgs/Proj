@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<title>Spring Boot Calculator</title>
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+<link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+
+<body>
+        <div class="container">
+		<div th:replace="fragments/header :: header"></div>
+
+	<main role="log" class="container">
+		
+		<div class="starter-template">
+		
+		    <label for="text">Login</label>
+			<form th:action="@{/reg}"  th:object="${form}" method="POST">
+				<input type="text" class="form-control" name="login" th:field="*{login}"/>
+				
+				 <label for="exampleInputPassword1">Email</label>	
+				 <input type="exampleInputEmail1" class="form-control" name="email" th:field="*{email}"/>
+				 
+				 <label for="exampleInputPassword1">Password</label>	
+				 <input type="password" class="form-control" name="password" th:field="*{password}"/>
+				<small id="emailHelp" class="form-text text-muted"></small>
+				<button type="submit" class="btn btn-secondary">Зарегистрироваться</button>
+				
+			</form>
+		</div>
+		<div th:if="${error}"> <button type="button" class="btn btn-secondary btn-lg btn-block">Вы ввели неверный пароль</button> </div>
+		<div th:if="${errorik}"> <button type="button" class="btn btn-secondary btn-lg btn-block">Такой Login уже занят</button> </div>
+		<div th:if="${errorik1}"> <button type="button" class="btn btn-secondary btn-lg btn-block">Такой Email уже используется</button> </div>
+		<div th:if="${sucsesful}"> <button type="button" class="btn btn-secondary btn-lg btn-block">Вы успушно зарегистрировались</button> </div>
+		
+		<div th:if="${user}">
+		<button type="button" class="btn btn-secondary btn-lg btn-block">Вы зашли под пользователем <span th:text="${user.userName}"></span>
+		
+		<!-- <div th:if="${user}">
+		<button type="button" class="btn btn-secondary btn-lg btn-block">Вы зашли под пользователем <span th:text="${user.email}"></span> -->
+		
+		</div>
+		
+	</main>
+	<!-- /.container -->
+
+	<script type="text/javascript"
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
