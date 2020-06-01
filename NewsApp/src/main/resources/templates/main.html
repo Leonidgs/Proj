@@ -12,10 +12,6 @@
 
 <body>
 	<div class="container">
-	
-		<div th:text="${cookie} ? ${cookie.aLogin} : 'thftjtf'"></div>
-	
-	
 		<div th:replace="fragments/header :: header"></div>
 		<main>
 			<div class="card mb-3" th:each="article : ${articles.headlines}">

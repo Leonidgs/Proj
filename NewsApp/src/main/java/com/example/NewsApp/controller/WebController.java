@@ -75,7 +75,8 @@ public class WebController {
 		SingleArticle singleArticle = handler.requestForObject(article.getLinks().getSelf(), SingleArticle.class);
 		var dtoArticle = converter.convertArticle(singleArticle);
 		model.addAttribute("dtoArticle", dtoArticle);
-		return "oneArticle";
+		model.addAttribute("cookie", supplier.get().getCookie());
+		return "article";
 	}
 	
 	@GetMapping("/login")

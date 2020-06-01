@@ -29,3 +29,20 @@ footer{
 	
 	margin-left: 10px;
 }
+
+.content {
+	position: fixed;
+	height: 100%;
+	width: 100%
+}
+
+.content div {
+	justify-content: center;
+	height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.blog-post {
+	text-align: justify;
+}
