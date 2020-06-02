@@ -121,7 +121,7 @@ public class WebController {
 	@GetMapping("/reg")
 	public String registering(Model model) {
 		model.addAttribute("form", new RequestFormPassword());
-		return "registering";
+		return "registration";
 	}
 	
 	@PostMapping("/reg")
@@ -134,17 +134,17 @@ public class WebController {
 		if (users.containsKey(form.getLogin())) {
 			System.out.println("Такой Login уже зарегистрирован");
 			model.addAttribute("errorik", true);
-			return "registering";
+			return "registration";
 		} else if (emails.contains(prov)){
 			model.addAttribute("errorik1", true);
 			System.out.println("Такой Email уже зарегистрирован");
-			return "registering";
+			return "registration";
 		} else {
 			users.put(form.getLogin(), new User(form.getLogin(), form.getEmail(), form.getPassword()));
 			emails.add(prov);
 			System.out.println("Пользователь успешно зарегистрирован");
 			model.addAttribute("sucsesful", true);
-			return "signIn";
+			return "login";
 		}	
 	}
 }
