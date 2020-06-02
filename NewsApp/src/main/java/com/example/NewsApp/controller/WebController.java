@@ -52,6 +52,24 @@ public class WebController {
 	}};
 	private List<String> emails = new ArrayList<String>();
 	
+	@PostMapping("/search")
+	public String getSearchArticles(Model model, @RequestParam(name = "query") String query) {
+		List<Article> afterSearch = new ArrayList<Article>();
+		for (Article a : news.values()) {
+			if (a.getInfo().getTitle().toLowerCase().matches(".*(^|\\W)" + query.toLowerCase() + "($|\\W).*")) {
+				afterSearch.add(a);
+			}
+		}
+		var pageParam = new PageParam(afterSearch, null);
+		var page = new Page(null, 5, pageParam.getCountArticles());
+		Articles articles = new Articles();
+		articles.setHeadlines(afterSearch);
+		model.addAttribute("articles", articles);
+		model.addAttribute("page", page);
+		model.addAttribute("cookie", supplier.get().getCookie());
+		model.addAttribute("search", query);
+		return "search";
+	}
 	
 	@GetMapping("/news")
 	public String getMainPage(Model model, @RequestParam(name = "page", required = false) Integer pageNum) {

@@ -1,5 +1,8 @@
 package com.example.NewsApp.model.page;
 
+import java.util.List;
+
+import com.example.NewsApp.model.articles.Article;
 import com.example.NewsApp.model.articles.Articles;
 
 import lombok.Getter;
@@ -15,6 +18,14 @@ public class PageParam {
 	private int lastItem;
 	private int countArticles;
 	private int step;
+	
+	public PageParam(List<Article> listArticles,Integer pageNum ) {
+		this.countArticles = listArticles.size();
+		this.firstItem = 0;
+		this.lastItem = 10;
+		this.step = 10;
+		init(pageNum);
+	}
 	
 	public PageParam(Articles articles, Integer pageNum) {
 		this.countArticles = articles.getHeadlines().size();
