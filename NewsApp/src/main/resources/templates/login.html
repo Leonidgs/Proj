@@ -13,25 +13,24 @@
 </head>
 
 <body>
-        <div class="content">
-        	<div>
-        		<form th:action="@{/login}"  th:object="${form}" method="POST" class="form-signin">
-					<label for="inputLogin" class="sr-only">Login</label>
-					<input type="text" class="form-control mb-3" name="login" th:field="*{login}" id="inputLogin" placeholder="Login"/>
-					<label for="inputPassword" class="sr-only">Password</label>
-					<input type="password" class="form-control mb-3" name="password" th:field="*{password}" id="inputPassword" placeholder="Password"/>
-					<button type="submit" class="btn btn-lg btn-primary btn-block">Войти</button>
-				</form>
-	        	
-	        	<div th:if="${error}"> 
-					<div>Вы ввели неверный пароль</div> 
-				</div>
-				<div th:if="${user}">
-					<div>Вы зашли под пользователем <span th:text="${user.userName}"></span></div>
-				</div>
-        	</div>	
+	
+	<div class="content">
+		<div class='log-title mb-3' th:if="${error}"> 
+			<h5>Вы ввели неверный пароль</h5> 
 		</div>
+		<div class='log-title mb-3' th:if="${error}==null"> 
+			<h5>Укажите учетные данные</h5> 
+		</div>	
+      	<form th:action="@{/login}"  th:object="${form}" method="POST" class="form-signin">
+			<label for="inputLogin" class="sr-only">Login</label>
+			<input type="text" class="form-control mb-3" name="login" th:field="*{login}" id="inputLogin" placeholder="Login"/>
+			<label for="inputPassword" class="sr-only">Password</label>
+			<input type="password" class="form-control mb-3" name="password" th:field="*{password}" id="inputPassword" placeholder="Password"/>
+			<button type="submit" class="btn btn-lg btn-primary btn-block">Войти</button>
+		</form>
 
+	</div>
+	
 	<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

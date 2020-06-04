@@ -52,40 +52,89 @@ public class WebController {
 	}};
 	private List<String> emails = new ArrayList<String>();
 	
-	@PostMapping("/search")
-	public String getSearchArticles(Model model, @RequestParam(name = "query") String query) {
-		List<Article> afterSearch = new ArrayList<Article>();
-		for (Article a : news.values()) {
-			if (a.getInfo().getTitle().toLowerCase().matches(".*(^|\\W)" + query.toLowerCase() + "($|\\W).*")) {
-				afterSearch.add(a);
-			}
-		}
-		var pageParam = new PageParam(afterSearch, null);
-		var page = new Page(null, 5, pageParam.getCountArticles());
-		Articles articles = new Articles();
-		articles.setHeadlines(afterSearch);
-		model.addAttribute("articles", articles);
-		model.addAttribute("page", page);
-		model.addAttribute("cookie", supplier.get().getCookie());
-		model.addAttribute("search", query);
-		return "search";
-	}
-	
+//	@PostMapping("/search")
+//	public String getSearchArticles(Model model, @RequestParam(name = "query") String query) {
+//		List<Article> afterSearch = new ArrayList<Article>();
+//		for (Article a : news.values()) {
+//			if (a.getInfo().getTitle().toLowerCase().matches(".*(^|\\W)" + query.toLowerCase() + "($|\\W).*")) {
+//				afterSearch.add(a);
+//			}
+//		}
+//		var pageParam = new PageParam(afterSearch, null);
+//		var page = new Page(null, 5, pageParam.getCountArticles());
+//		Articles articles = new Articles();
+//		articles.setHeadlines(afterSearch);
+//		model.addAttribute("articles", articles);
+//		model.addAttribute("page", page);
+//		model.addAttribute("cookie", supplier.get().getCookie());
+//		model.addAttribute("search", query);
+//		return "search";
+//	}
+//	
 	@GetMapping("/news")
-	public String getMainPage(Model model, @RequestParam(name = "page", required = false) Integer pageNum) {
-		Articles articles = handler.requestForObject(url, Articles.class);
+	public String getMainPage(Model model, @RequestParam(name = "page", defaultValue = "1") Integer pageNum,@RequestParam(name = "query",required = false) String query) {
+		
+		Articles articles = new Articles();
+		articles = handler.requestForObject(url, Articles.class);
+
 		List<Article> articlesList = articles.getHeadlines();
+		
 		for (Article a : articlesList) {
 			news.put(a.getInfo().getId(), a);
 		}
-		var pageParam = new PageParam(articles, pageNum);
-		var page = new Page(pageNum, 5, pageParam.getCountArticles());
-		articles.setHeadlines(articles.getHeadlines().subList(pageParam.getFirstItem(), pageParam.getLastItem()));
+		
+		//System.out.println(pageNum);
+		
+		PageParam pageParam;
+		Page page;
+		
+		
+		if(query!=null && query!="") {
+			
+			List<Article> afterSearch = new ArrayList<Article>();
+
+			for (Article a : news.values()) {
+				if (a.getInfo().getTitle().toLowerCase().matches(".*(^|\\W)" + query.toLowerCase() + "($|\\W).*")) {
+					afterSearch.add(a);
+				}
+			}
+			
+			if(afterSearch.size()>0) {
+				//System.out.println(pageNum);
+				articles.setHeadlines(afterSearch);
+				
+				System.out.println(articles.getHeadlines().size());
+				pageParam = new PageParam(articles, pageNum);
+				page = new Page(pageNum, 5, pageParam.getCountArticles(),pageParam.getStep());
+				articles.setHeadlines(articles.getHeadlines().subList(pageParam.getFirstItem(), pageParam.getLastItem()));
+				
+				model.addAttribute("search", query);
+			}else {
+
+				model.addAttribute("cookie", supplier.get().getCookie());
+				model.addAttribute("pageName", "news");
+				model.addAttribute("search", query);
+				return "main";
+			}
+		
+		}else {
+
+			pageParam = new PageParam(articles, pageNum);
+			
+			page = new Page(pageNum, 5, pageParam.getCountArticles(),pageParam.getStep());
+
+			articles.setHeadlines(articles.getHeadlines().subList(pageParam.getFirstItem(), pageParam.getLastItem()));
+		}
+		
 		model.addAttribute("articles", articles);
 		model.addAttribute("page", page);
 		model.addAttribute("cookie", supplier.get().getCookie());
+		model.addAttribute("pageName", "news");
+		
 		return "main";
 	}
+	
+
 	
 	@GetMapping("/article")
 	public String getOneArticle(Model model, @RequestParam(name="id") String id) {
@@ -109,7 +158,7 @@ public class WebController {
 			var cookie = new Cookie(form.getLogin());
 			// из supplier с помощью get получаем  SecurityHolde и в нем с помощью set сохраняем cookie
 			supplier.get().setCookie(cookie);
-			model.addAttribute("cookie", cookie);
+			//model.addAttribute("cookie", cookie);
 			return "redirect:news";
 		} else {
 			model.addAttribute("form", new RequestFormPassword());
@@ -127,24 +176,32 @@ public class WebController {
 	@PostMapping("/reg")
 	public String registeringPage(Model model, @ModelAttribute RequestFormPassword form) {
 		model.addAttribute("form", new RequestFormPassword());
-		String prov = form.getEmail();
-		emails.add("vasya@yandex.ru");
-		emails.add("sasha@yandex.ru");
+		System.out.println(form.getLogin());
+		System.out.println(form.getEmail());
 						
 		if (users.containsKey(form.getLogin())) {
-			System.out.println("Такой Login уже зарегистрирован");
+
 			model.addAttribute("errorik", true);
 			return "registration";
-		} else if (emails.contains(prov)){
+		} else if (users.values().stream().map(User::getEmail).anyMatch(form.getEmail()::equals)){
 			model.addAttribute("errorik1", true);
-			System.out.println("Такой Email уже зарегистрирован");
+
 			return "registration";
 		} else {
 			users.put(form.getLogin(), new User(form.getLogin(), form.getEmail(), form.getPassword()));
-			emails.add(prov);
-			System.out.println("Пользователь успешно зарегистрирован");
-			model.addAttribute("sucsesful", true);
-			return "login";
+
+			var cookie = new Cookie(form.getLogin());
+
+			supplier.get().setCookie(cookie);
+
+			return "redirect:news";
 		}	
+	}
+	
+	@GetMapping("/blogs")
+	public String blogsPage(Model model) {
+		model.addAttribute("cookie", supplier.get().getCookie());
+		model.addAttribute("pageName", "blogs");
+		return "blogs";
 	}
 }
