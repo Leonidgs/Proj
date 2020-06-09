@@ -198,10 +198,10 @@ public class WebController {
 		}	
 	}
 	
-	@GetMapping("/blogs")
-	public String blogsPage(Model model) {
-		model.addAttribute("cookie", supplier.get().getCookie());
-		model.addAttribute("pageName", "blogs");
-		return "blogs";
-	}
+//	@GetMapping("/blogs")
+//	public String blogsPage(Model model) {
+//		model.addAttribute("cookie", supplier.get().getCookie());
+//		model.addAttribute("pageName", "blogs");
+//		return "blogs";
+//	}
 }
