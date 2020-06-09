@@ -45,12 +45,17 @@ public class BlogsComtroller {
 	@PostMapping("/newBlog")
 	public String getBlogs(Model model, @ModelAttribute RequestNewBlogForm form) throws IOException {
 		String id = UUID.randomUUID().toString();
-		var imageSrc = "/uploads/" + id + ".jpg";
+		var target = "/uploads/";
+		var imageSrc = target + id + ".jpg";
 		var uploadDir = System.getProperty("user.dir") + imageSrc; 
 		var blog = new Blog(form.getTitle(), form.getDescription(), new Date(), imageSrc, id,  supplier.get().getCookie().getALogin());
 		blogs.put(id, blog);
 		
 		BufferedImage input = ImageIO.read(form.getImage().getInputStream());  
+		File targetDir = new File(System.getProperty("user.dir") + target);
+		if (!targetDir.exists()) {
+			targetDir.mkdir();
+		}
 		File outputFile = new File(uploadDir); 
 		ImageIO.write(input, "jpg", outputFile);
 		return "redirect:blogs";
