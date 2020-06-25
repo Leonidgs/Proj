@@ -38,35 +38,57 @@ public class BlogsComtroller {
 		}
 		model.addAttribute("blogs", blogs.values());
 		model.addAttribute("cookie", supplier.get().getCookie());
+		model.addAttribute("pageName", "blogs");
 
 		return "blogs";
 	}
 
 	@PostMapping("/newBlog")
 	public String getBlogs(Model model, @ModelAttribute RequestNewBlogForm form) throws IOException {
-		String id = UUID.randomUUID().toString();
-		var target = "/uploads/";
-		var imageSrc = target + id + ".jpg";
-		var uploadDir = System.getProperty("user.dir") + imageSrc; 
-		var blog = new Blog(form.getTitle(), form.getDescription(), new Date(), imageSrc, id,  supplier.get().getCookie().getALogin());
-		blogs.put(id, blog);
 		
-		BufferedImage input = ImageIO.read(form.getImage().getInputStream());  
-		File targetDir = new File(System.getProperty("user.dir") + target);
-		if (!targetDir.exists()) {
-			targetDir.mkdir();
+		//System.out.println("dfdf" + form.getTitle().length());
+		if(!form.getTitle().isEmpty() && !form.getDescription().isEmpty()) {
+		
+			String id = UUID.randomUUID().toString();
+			
+			var imageSrc="";
+
+			var target = "/uploads/";
+			imageSrc = target + id + ".jpg";
+			var uploadDir = System.getProperty("user.dir") + imageSrc;
+
+			BufferedImage input = ImageIO.read(form.getImage().getInputStream());  
+			File targetDir = new File(System.getProperty("user.dir") + target);
+			if (!targetDir.exists()) {
+				targetDir.mkdir();
+			}
+			File outputFile = new File(uploadDir);
+			if(input!=null) {
+				ImageIO.write(input, "jpg", outputFile);
+				var blog = new Blog(form.getTitle(), form.getDescription(), new Date(), imageSrc, id,  supplier.get().getCookie().getALogin());
+				blogs.put(id, blog);
+			
+			}else {
+				imageSrc = "";
+				var blog = new Blog(form.getTitle(), form.getDescription(), new Date(), imageSrc, id,  supplier.get().getCookie().getALogin());
+				blogs.put(id, blog);
+			}
+			
+			model.addAttribute("pageName", "blogs");
+			
 		}
-		File outputFile = new File(uploadDir); 
-		ImageIO.write(input, "jpg", outputFile);
+		
 		return "redirect:blogs";
+
 	}
 
 	@GetMapping("/blog")
 	public String getSingleBlog(Model model, @RequestParam(name = "id") String id) {
 		var blog = blogs.get(id);
-		model.addAttribute("singleBlog", blog);
+		model.addAttribute("blog", blog);
 		model.addAttribute("cookie", supplier.get().getCookie());
-		return "singleBlog";
+		model.addAttribute("pageName", "blogs");
+		return "blog";
 	}
 
 	@GetMapping("/createBlog")

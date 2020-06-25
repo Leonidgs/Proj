@@ -19,4 +19,13 @@ public class Blog {
 	private String blogImage;
 	private String idBlog;
 	private String loginAutor;
+	
+	public String getSubTitle() {
+		if(blogText.length()>100)
+			return blogText.substring(0, 100);
+		else {
+			return blogText;
+		}
+	
+	}
 }

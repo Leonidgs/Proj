@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>БЛОГИ</title>
+	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" th:href="@{/css/main.css}"/>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+</head>
+
+<body>
+	<div class="container">
+		<div th:replace="fragments/header :: header"></div>
+		<main class="blog-post">
+			<img th:src="${blog.blogImage}">	
+			<h2 class="blog-post-title" th:text="${blog.blogTitle}"></h2>
+			<p class="blog-post-meta" th:text="${#dates.format(blog.blogDate, 'dd-MM-yyyy HH:mm')}"></p>
+			<div th:text="${blog.blogText}"></div>
+		</main>
+	</div>
+	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+	<script src="https://use.fontawesome.com/1be33d0db5.js"></script>
+</body>
+</html>

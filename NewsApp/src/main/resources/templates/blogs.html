@@ -13,44 +13,50 @@
 	<div class="container">
 		<div th:replace="fragments/header :: header"></div>
 		<main>
-			<div class="reg-panel" th:if="${cookie} != null and ${form} == null">
+			<div class="mb-3" th:if="${cookie} != null and ${form} == null">
 				<form th:action="@{/blogs}">
 					<input type="hidden" name="flag" value="on"/>
-					<button type="submit" class="btn btn-primary btn-add"><i class="fas fa-plus"></i></button>
+					<button type="submit" class="btn btn-primary btn-add" title="Добавить новость"><i class="fas fa-plus"></i></button>
 			    </form>
 			</div>
 			<div th:if="${form} != null">
 				<form th:action="@{/newBlog}" th:object="${form}" method="POST" enctype="multipart/form-data">
-					<div class="form-group">
+					<div class="form-row mb-3 col-6">
 						<input type="file" class="form-control-file" name="image" th:field="*{image}" id="exampleFormControlFile1">
 					</div>
-					<div class="form-row mb-3">
-						<input class="form-control" type="text" placeholder="Введите тему" name="title" th:field="*{title}">
+					
+					<div class="form-row mb-3 col-6">
+						<input class="form-control" type="text" placeholder="Введите тему" name="title" th:field="*{title}" required >
 					</div>
-						<div class="form-row mb-3">
-						<textarea class="form-control" type="text" placeholder="Введите текст" name="description" th:field="*{description}" rows="10"></textarea>
-					</div>    
-					<button type="submit" class="btn btn-lg btn-primary btn-block" >Загрузить</button>
+					<div class="form-row mb-3 col-6">
+						<textarea class="form-control" type="text" placeholder="Введите текст" name="description" th:field="*{description}" rows="10" required ></textarea>
+					</div>
+					<div class="form-row mb-3 col-2">
+						<button type="submit" class="btn btn-primary" >Загрузить</button>
+					</div>ки
 				</form>
 			</div>
-			<div class="reg-panel" th:if="${blogs} != null">
+			<div th:if="${blogs} != null">
 			
 				<div class="card mb-3" th:each="blog : ${blogs}">
 					<div class="row no-gutters">
 						<div class="card-image col-md-2">
-							<img th:src="@{${blog.blogImage}}"/>
+							<div th:if="${blog.blogImage}!=null">
+								<img th:src="@{${blog.blogImage}}" class="card-img"/>
+							</div>
 						</div>
 						<div class="col-md-10">
 							<div class="card-body">
 							    <h5 class="card-title" th:text="${blog.blogTitle}"></h5>
+							    <p class="card-text" th:text="${blog.getSubTitle()}"></p>
 							    <a href="/blog?id=" th:attrappend="href=${blog.idBlog}"><small>подробнее</small></a>
 							</div>
 						</div>
 					</div>
 				</div>
-			
+				
 			</div>
-			<div class="reg-panel" th:if="${blogs} != null">
+			<div class="reg-panel" th:if="${blogs.isEmpty()}">
 				<p>Здесь пока что ничего нет</p>
 			</div>
 			
