@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
@@ -198,10 +199,19 @@ public class WebController {
 		}	
 	}
 	
-//	@GetMapping("/blogs")
-//	public String blogsPage(Model model) {
-//		model.addAttribute("cookie", supplier.get().getCookie());
-//		model.addAttribute("pageName", "blogs");
-//		return "blogs";
-//	}
+	@GetMapping("/best")
+	public String getBestNew(Model model) {
+		
+		//var article = news.values().iterator().next();
+		
+		var list = new ArrayList<>(news.values());
+		var article = list.get(new Random().nextInt(list.size()-1));
+
+		SingleArticle singleArticle = handler.requestForObject(article.getLinks().getSelf(), SingleArticle.class);
+		var dtoArticle = converter.convertArticle(singleArticle);
+		model.addAttribute("dtoArticle", dtoArticle);
+		model.addAttribute("cookie", supplier.get().getCookie());
+		model.addAttribute("pageName", "best");
+		return "article";
+	}
 }

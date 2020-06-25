@@ -32,7 +32,7 @@
 		        <a class="nav-link" href="/blogs" th:classappend="${pageName} == 'blogs' ? 'active' : ''">Блоги</a>
 		      </li>
 		      <li class="nav-item">
-		        <a class="nav-link" href="#">Новость дня</a>
+		        <a class="nav-link" href="/best" th:classappend="${pageName} == 'best' ? 'active' : ''">Новость дня</a>
 		      </li>
 		    </ul>
 		    <div th:if="${pageName} == 'news'">
